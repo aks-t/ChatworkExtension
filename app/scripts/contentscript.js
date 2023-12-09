@@ -3,18 +3,10 @@
  */
 const handler = (() => {
     const events = {}
-    let key = 0
     return {
         addListener (target, type, listener, capture) {
             target.addEventListener(type, listener, capture)
-            events[key] = {
-                target: target,
-                type: type,
-                listener: listener,
-                capture: capture
-            }
-            // console.log('addListener: '+key);
-            return key++
+            // console.log('addListener: ');
         },
         removeListener (k) {
             let e
@@ -22,9 +14,6 @@ const handler = (() => {
                 // console.log('removeListener: '+k);
                 e = events[k]
                 e.target.removeEventListener(e.type, e.listener, e.capture)
-            }
-            if (!Object.keys(events).length) {
-                key = 0
             }
         }
     }
@@ -37,10 +26,17 @@ const btns = [
     {
         id: '_addInfoText',
         left: true,
-        label: 'メッセージに[info][/info]を追加します [Ctrl + i]',
-        iconCls: 'icoFontInfo',
+        label: 'メッセージに[info][/info]を追加します',
+        iconCls: 'btnWarning',
+        iconNoLg: true,
+        html: 'info',
         innerStyle: {
-            paddingBottom: '2px'
+            fontSize: '10px',
+            borderRadius: '2px',
+            padding: '2px 4px',
+            position: 'relative',
+            top: '-1px',
+            left: '-1px'
         },
         params: {
             action: 'info',
@@ -49,52 +45,52 @@ const btns = [
     }, {
         id: '_addInfoWithTitleText',
         left: true,
-        label: 'メッセージに[info][title][/title][/info]を追加します [Ctrl + t]',
-        iconCls: 'icoFontInfo',
+        label: 'メッセージに[title][/title]を追加します',
+        iconCls: 'btnDanger',
+        iconNoLg: true,
+        html: 'title',
         innerStyle: {
-            color: 'blue',
-            paddingBottom: '2px'
+            fontSize: '10px',
+            borderRadius: '2px',
+            padding: '2px 4px',
+            position: 'relative',
+            top: '-1px',
+            left: '-1px'
         },
         params: {
-            action: 'info',
-            addEndTag: true,
-            addTitle: true
+            action: 'title',
+            addEndTag: true
         }
     }, {
         id: '_addCodeText',
         left: true,
-        label: 'メッセージに[code][/code]を追加します [Ctrl + w]',
-        iconCls: 'icoFontSetting',
+        label: 'メッセージに[code][/code]を追加します',
+        iconCls: 'btnSuccess',
+        iconNoLg: true,
+        html: 'code',
         innerStyle: {
-            paddingBottom: '2px'
+            fontSize: '10px',
+            borderRadius: '2px',
+            padding: '2px 4px',
+            position: 'relative',
+            top: '-1px',
+            left: '-1px'
         },
         params: {
             action: 'code',
             addEndTag: true
         }
-    }, {
-        id: '_addQtText',
-        left: true,
-        label: 'メッセージに[qt][/qt]を追加します',
-        iconCls: 'icoFontMessegeQuote',
-        iconNoLg: true,
-        innerStyle: {
-            paddingBottom: '2px'
-        },
-        params: {
-            action: 'qt',
-            addEndTag: true
-        }
-    }, {
+    },
+    {
         id: '_addHrText',
         left: true,
-        label: 'メッセージに[hr]を追加します [Ctrl + l]',
+        label: 'メッセージに[hr]を追加します',
         iconCls: 'btnPrimary',
         iconNoLg: true,
         html: 'hr',
         innerStyle: {
             fontSize: '10px',
-            borderRadius: '3px',
+            borderRadius: '2px',
             padding: '2px 4px',
             position: 'relative',
             top: '-1px',
@@ -102,76 +98,7 @@ const btns = [
         },
         params: {
             action: 'hr',
-        }
-    }, {
-        id: '_addEmoRoger',
-        label: '了解する人',
-        src: 'https://assets.chatwork.com/images/emoticon2x/emo_roger.gif',
-        alt: '(roger)',
-        params: {
-            startTag: '(roger)',
-        }
-    }, {
-        id: '_addEmoBow',
-        label: 'おじぎする人',
-        src: 'https://assets.chatwork.com/images/emoticon2x/emo_bow.gif',
-        alt: '(bow)',
-        params: {
-            startTag: '(bow)',
-        }
-    }, {
-        id: '_dispHelp',
-        label: [
-            'ショートカットキー',
-            'Ctrl + i : [info][/info]',
-            'Ctrl + t : [info][title][/title][/info]',
-            'Ctrl + w : [code][/code]',
-            'Ctrl + l : [hr]',
-        ].join("\n"),
-        iconCls: 'icoFontHelp',
-        fn: () => {
-            return false
-        }
-    }, {
-        id: '_addStyle',
-        label: '【実験】縮んだり伸びたりします',
-        iconCls: 'icoFontActionMore',
-        fn: () => {
-            const style = [
-                '.roomListItem,',
-                '#_roomListArea li[role="listitem"] {',
-                '  padding: 0 28px 0 8px!important;',
-                '}',
-                '#_roomListArea li[role="listitem"] > div:first-of-type > div:first-child {',
-                '  height: 28px;',
-                '}',
-                '#_roomListArea li[role="listitem"] > div:first-of-type > div:first-child > img {',
-                '  width: 28px;',
-                '  height: 28px;',
-                '}',
-                '#_roomListArea li[role="listitem"] > div:first-of-type > div:nth-child(2) {',
-                '  padding: 2px 0 0 0;',
-                '}',
-                '#_roomListArea li[role="listitem"] > div:nth-child(2) {',
-                '  top:calc(0.3em)!important;',
-                '}',
-                '.roomListItem .avatarMedium {',
-                '  width: 27px!important;',
-                '  height: 27px!important;',
-                '}',
-                '.timelineMessage * {',
-                '  line-height: 1.3em!important;',
-                '}',
-            ].join("\n")
-            if (document.getElementById('_addStyleCWQII')) {
-                document.getElementById('_addStyleCWQII').remove()
-            } else {
-                const styleEl = document.createElement('style')
-                styleEl.id = '_addStyleCWQII'
-                styleEl.type = 'text/css'
-                styleEl.innerText = style
-                document.body.appendChild(styleEl)
-            }
+            addEndTag: true
         }
     }
 ]
@@ -182,12 +109,6 @@ const btns = [
 const app = {
     // ボタン
     buttons: [],
-
-    // ボタンに設定したイベントのキー
-    btnEventKeys: [],
-
-    // キーボードイベントのイベントキー
-    keyboardEventKey: null,
 
     /**
      * チャット入力エリア
@@ -200,10 +121,7 @@ const app = {
      * チャット画面かどうか
      */
     isChat () {
-        return !!document.getElementById('_chatText') &&
-            !!document.getElementById('_chatSendArea') &&
-            !!document.getElementById('_file') &&
-            !!document.getElementById('_myStatusButton')
+        return !!document.getElementById('_chatSendArea')
     },
 
     /**
@@ -256,74 +174,44 @@ const app = {
     },
 
     /**
-     * キーボードショートカット
-     */
-    setKeyboardEvent () {
-        const me = this
-        handler.removeListener(me.keyboardEventKey)
-        me.keyboardEventKey = handler.addListener(me.getInputArea(), 'keydown', (e) => {
-            const code = e.which,
-                keyChar = String.fromCharCode(code).toLowerCase()
-            if (e.ctrlKey) {
-                // console.log('push');
-                // console.log(keyChar);
-                switch (keyChar) {
-                    case 'i':
-                        me.clickAction(btns[0].params)
-                        break
-                    case 't':
-                        me.clickAction(btns[1].params)
-                        break
-                    case 'w':
-                        me.clickAction(btns[2].params)
-                        break
-                    case 'l':
-                        me.clickAction(btns[4].params)
-                        break
-                }
-            }
-        }, false)
-        me.btnEventKeys.push(me.keyboardEventKey)
-    },
-
-    /**
      * ボタン挿入
      */
     insert () {
         // console.log('insert');
         const me = this,
             wrapRightEl = document.createElement('ul'),
-            wrapLeftEl = document.getElementById('_file').closest('ul'),
-            parentRightEl = document.getElementById('_chatSendArea').querySelector('ul + div'),
-            tooltipEl = document.querySelector('.messageTooltip__text')
+            wrapLeftEl = document.getElementById('_file').closest('ul')
+            // parentRightEl = document.getElementById('_chatSendArea').querySelector('ul + div'),
+            // tooltipEl = document.querySelector('.messageTooltip__text')
 
-        if (
-            !document.getElementById('_myStatusButton') ||
-            !!document.getElementById('_addInfoText')
-        ) {
-            return false
-        }
+        //if (
+            // !document.getElementById('_myStatusButton') ||
+            // !!document.getElementById('_addInfoText')
+            //!document.getElementById('message-input-area')
+        //) {
+            //console.log('insert false');
+            //return false
+        //}
         // console.log('insert exec');
 
-        if (parentRightEl) {
-            wrapRightEl.style.display = 'flex'
-            parentRightEl.prepend(wrapRightEl)
-        }
-        if (tooltipEl) {
-            tooltipEl.style.whiteSpace = 'pre'
-        }
+        // if (parentRightEl) {
+        //    wrapRightEl.style.display = 'flex'
+        //    parentRightEl.prepend(wrapRightEl)
+        // }
+        // if (tooltipEl) { tooltipEl.style.whiteSpace = 'pre' }
 
         me.buttons.forEach((btn, key) => {
             const o = btns[key]
-            if (o.left) {
+            //if (o.left) {
                 wrapLeftEl.appendChild(btn)
-            } else if (parentRightEl) {
-                wrapRightEl.appendChild(btn)
-            }
+            ///} 
+            //else if (parentRightEl) {
+               // wrapRightEl.appendChild(btn)
+            //}
         })
 
         // キーボードイベントハンドラ設定
-        me.setKeyboardEvent()
+        // me.setKeyboardEvent()
     },
 
     /**
@@ -335,19 +223,20 @@ const app = {
         btns.forEach(o => {
             let btn, k
             btn = me.createButton(o)
-            if (o.params) {
+            // if (o.params) {
                 k = handler.addListener(btn, 'click', () => {
                     document.getElementById(o.id).blur()
                     me.clickAction(o.params)
                 })
-            } else {
-                k = handler.addListener(btn, 'click', () => {
-                    document.getElementById(o.id).blur()
-                    o.fn()
-                })
-            }
+            // } 
+            //else {
+            //    k = handler.addListener(btn, 'click', () => {
+            //        document.getElementById(o.id).blur()
+            //        o.fn()
+            //    })
+            // }
             me.buttons.push(btn)
-            me.btnEventKeys.push(k)
+            // me.btnEventKeys.push(k)
         })
     },
 
@@ -362,7 +251,7 @@ const app = {
         btn.appendChild(inner)
         li.appendChild(btn)
 
-        li.style.marginRight = '8px'
+        li.style.marginRight = '2px'
 
         btn.id = args.id
         btn.setAttribute('role', 'button')
@@ -371,20 +260,20 @@ const app = {
         //btn.style.display = 'inline-block'
         btn.style.border = 'none'
         btn.style.backgroundColor = 'transparent'
-        btn.style.cursor = 'pointer'
+        // btn.style.cursor = 'pointer'
 
-        if (args.src) {
-            inner.classList.add('ui_emoticon')
-            inner.style.height = '15px'
-            inner.style.width = '15px'
-            inner.style.paddingBottom = '4px'
-            inner.src = args.src || ''
-            inner.alt = args.alt || ''
-        } else {
+        //if (args.src) {
+        //    inner.classList.add('ui_emoticon')
+        //    inner.style.height = '15px'
+        //    inner.style.width = '15px'
+        //    inner.style.paddingBottom = '4px'
+        //    inner.src = args.src || ''
+        //    inner.alt = args.alt || ''
+        //} else {
             inner.classList.add(args.iconCls || null)
             inner.style.paddingBottom = '4px'
             inner.textContent = args.html || ''
-        }
+        //}
 
         // スタイルを調整
         if (!!args.innerStyle) {
